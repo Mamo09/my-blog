@@ -1,8 +1,8 @@
 
-export default function Cv() {
+export default function Gallery() {
   return (
     <div>
-      <h1>MY CV</h1>
+      <h1>MY gallery</h1>
 
     </div>
   );

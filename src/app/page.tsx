@@ -15,7 +15,7 @@ export default function Home() {
       <section className="max-w-2xl mx-auto mb-16">
         <h2 className="text-2xl font-semibold text-amber-900 mb-4">About Me</h2>
         <p className="text-amber-800/70 mb-4">
-          Hi! I'm a passionate frontend developer with experience in React, Next.js, and TypeScript. 
+          Hi! I&apos;m a passionate frontend developer with experience in React, Next.js, and TypeScript. 
           I love creating beautiful and functional user interfaces.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
