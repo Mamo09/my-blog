@@ -64,12 +64,13 @@ export async function getPostBySlug(slug: string) {
 
 export function getTableOfContents(content: string): TableOfContents[] {
   const headingLines = content.split('\n').filter(line => line.match(/^#{1,3} /));
-  
+
   return headingLines.map(line => {
-    const level = line.match(/^#+/)[0].length;
+    const match = line.match(/^#+/);
+    const level = match ? match[0].length : 0;
     const title = line.replace(/^#+\s+/, '');
     const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    
+
     return { id, title, level };
   });
 }
