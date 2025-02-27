@@ -1,8 +1,16 @@
-import { getAllPosts } from '@/app/components/contents/blog/utils';
 import Link from 'next/link';
+import { getAllPosts } from '@/app/components/contents/blog/utils';
 
-export default function Blog() {
-  const posts = getAllPosts();
+export default async function Blog() {
+  const posts = await getAllPosts();
+
+  if (!posts?.length) {
+    return (
+      <div className="min-h-screen p-8 flex items-center justify-center">
+        <p className="text-amber-800/70">No blog posts available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-8">

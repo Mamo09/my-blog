@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import matter from 'gray-matter';
 
-const postsDirectory = path.join(process.cwd(), 'src/app/components/contents/blog');
+const postsDirectory = join(process.cwd(), 'src/app/components/contents/blog');
 
 export interface BlogPost {
   slug: string;
@@ -20,36 +20,46 @@ interface TableOfContents {
   level: number;
 }
 
-export function getAllPosts() {
-  const fileNames = fs.readdirSync(postsDirectory)
-    .filter(fileName => fileName.endsWith('.mdx'));
+export async function getAllPosts(): Promise<BlogPost[]> {
+  try {
+    const fileNames = readdirSync(postsDirectory)
+      .filter(fileName => fileName.endsWith('.mdx'));
 
-  const allPosts = fileNames.map((fileName) => {
-    const slug = fileName.replace(/\.mdx$/, '');
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const posts = fileNames.map((fileName) => {
+      const slug = fileName.replace(/\.mdx$/, '');
+      const fullPath = join(postsDirectory, fileName);
+      const fileContents = readFileSync(fullPath, 'utf8');
+      const { data, content } = matter(fileContents);
+
+      return {
+        slug,
+        content,
+        ...data,
+      } as BlogPost;
+    });
+
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (error) {
+    console.error('Error reading blog posts:', error);
+    return [];
+  }
+}
+
+export async function getPostBySlug(slug: string) {
+  try {
+    const fullPath = join(process.cwd(), 'src/app/components/contents/blog', `${slug}.mdx`);
+    const fileContents = readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
     return {
       slug,
       content,
       ...data,
-    } as BlogPost;
-  });
-
-  return allPosts.sort((a, b) => (a.date < b.date ? 1 : -1));
-}
-
-export function getPostBySlug(slug: string) {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
-
-  return {
-    slug,
-    content,
-    ...data,
-  } as BlogPost;
+    };
+  } catch (error) {
+    console.error(`Error loading post ${slug}:`, error);
+    return null;
+  }
 }
 
 export function getTableOfContents(content: string): TableOfContents[] {

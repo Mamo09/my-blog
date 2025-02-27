@@ -1,10 +1,9 @@
 import type { Config } from "tailwindcss";
+import typography from '@tailwindcss/typography';
 
-export default {
+const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -16,10 +15,37 @@ export default {
         DEFAULT: {
           css: {
             maxWidth: 'none',
+            color: 'rgb(146 64 14 / 0.7)',
+            'h1, h2, h3, h4': {
+              color: 'rgb(120 53 15)',
+              fontWeight: '700',
+            },
+            a: {
+              color: 'rgb(146 64 14)',
+              '&:hover': {
+                color: 'rgb(120 53 15)',
+              },
+            },
+            strong: {
+              color: 'rgb(120 53 15)',
+            },
+            code: {
+              color: 'rgb(120 53 15)',
+              backgroundColor: 'rgb(254 243 199)',
+              borderRadius: '0.25rem',
+              padding: '0.2em 0.4em',
+            },
+            pre: {
+              backgroundColor: 'rgb(254 243 199)',
+            },
           },
         },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    typography,
+  ],
 } satisfies Config;
+
+export default config;
