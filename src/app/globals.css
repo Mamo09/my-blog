@@ -37,6 +37,7 @@ body {
 /* Add smooth scrolling */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
 }
 
 /* Reduce eye strain with subtle text shadow */

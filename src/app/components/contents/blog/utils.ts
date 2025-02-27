@@ -14,6 +14,12 @@ export interface BlogPost {
   content: string;
 }
 
+interface TableOfContents {
+  id: string;
+  title: string;
+  level: number;
+}
+
 export function getAllPosts() {
   const fileNames = fs.readdirSync(postsDirectory)
     .filter(fileName => fileName.endsWith('.mdx'));
@@ -31,7 +37,7 @@ export function getAllPosts() {
     } as BlogPost;
   });
 
-  return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return allPosts.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export function getPostBySlug(slug: string) {
@@ -44,4 +50,16 @@ export function getPostBySlug(slug: string) {
     content,
     ...data,
   } as BlogPost;
+}
+
+export function getTableOfContents(content: string): TableOfContents[] {
+  const headingLines = content.split('\n').filter(line => line.match(/^#{1,3} /));
+  
+  return headingLines.map(line => {
+    const level = line.match(/^#+/)[0].length;
+    const title = line.replace(/^#+\s+/, '');
+    const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    
+    return { id, title, level };
+  });
 }
