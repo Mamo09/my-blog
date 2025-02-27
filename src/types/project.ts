@@ -3,9 +3,11 @@ export type Project = {
   slug: string;
   title: string;
   description: string;
-  content: string;  // Markdown content
   date: string;
   image: string;
   tags: string[];
   link: string;
+  features: string[];
+  screenshots: string[];
+  techStack: string[];
 };
