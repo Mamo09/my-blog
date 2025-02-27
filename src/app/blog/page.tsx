@@ -22,16 +22,15 @@ export default async function Blog() {
           </p>
         </header>
 
-        <div className="space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {posts.map((post) => (
             <article 
               key={post.slug}
-              className="group bg-white/50 rounded-xl border border-amber-100 p-6 hover:shadow-lg hover:shadow-amber-100/20 transition-all duration-300"
+              className="group bg-white/50 rounded-xl border border-amber-100 p-6 hover:shadow-lg hover:shadow-amber-100/20 transition-all duration-300 flex flex-col"
             >
-              <Link href={`/blog/${post.slug}`}>
-                <div className="flex flex-col space-y-4">
-                  {/* Post Header */}
-                  <div className="flex items-center justify-between">
+              <Link href={`/blog/${post.slug}`} className="flex flex-col flex-grow">
+                <div className="flex flex-col space-y-4 flex-grow">
+                  <div className="flex flex-col space-y-2">
                     <h2 className="text-xl font-semibold text-amber-900 group-hover:text-amber-800 transition-colors">
                       {post.title}
                     </h2>
@@ -47,27 +46,11 @@ export default async function Blog() {
                     </time>
                   </div>
 
-                  {/* Excerpt */}
-                  <p className="text-amber-800/70">
+                  <p className="text-amber-800/70 flex-grow">
                     {post.excerpt}
                   </p>
 
-                  {/* Footer */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag, index) => (
-                        <span
-                          key={`${post.slug}-${tag}`}
-                          className="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-sm text-amber-700/60">
-                      {post.readingTime}
-                    </span>
-                  </div>
+                
                 </div>
               </Link>
             </article>
