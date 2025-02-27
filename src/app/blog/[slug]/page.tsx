@@ -4,21 +4,37 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getPostBySlug, getTableOfContents } from '@/app/components/contents/blog/utils';
 
 interface PageParams {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
+
 
 export default async function BlogPost({ params }: PageParams) {
   try {
-    const { slug } = params;
+    // Await the params object
+    const { slug } = await params;
     const post = await getPostBySlug(slug);
 
     if (!post) {
       notFound();
     }
 
-    const toc = getTableOfContents(post.content);
+
+    // Define the type for the post object
+    interface Post {
+      slug: string;
+      content: string;
+      title: string;
+      date: string;
+      readingTime: string;
+      tags: string[];
+    }
+
+    // Cast the post to the new type
+    const typedPost = post as Post;
+
+    const toc = getTableOfContents(typedPost.content);
     const formatDate = (dateString: string) => {
       return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -55,15 +71,15 @@ export default async function BlogPost({ params }: PageParams) {
             <article className="prose prose-amber max-w-none">
               <header className="mb-8 not-prose">
                 <h1 className="text-3xl font-extrabold text-amber-900 mb-4 leading-tight">
-                  {post.title}
+                  {typedPost.title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-amber-800/70 mb-6">
-                  <time dateTime={post.date} className="font-medium">{formatDate(post.date)}</time>
+                  <time dateTime={typedPost.date} className="font-medium">{formatDate(typedPost.date)}</time>
                   <span>•</span>
-                  <span>{post.readingTime}</span>
+                  <span>{typedPost.readingTime}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
+                  {typedPost.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="px-3 py-1 bg-amber-100/50 text-amber-800 rounded-full text-sm font-medium"
@@ -72,6 +88,7 @@ export default async function BlogPost({ params }: PageParams) {
                     </span>
                   ))}
                 </div>
+
               </header>
               
               <div className="text-amber-800/70">
