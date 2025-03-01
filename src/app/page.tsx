@@ -1,5 +1,20 @@
-export default function Home() {
+/* eslint-disable @next/next/no-img-element */
+import { projects } from '@/data/projects';
+import Link from 'next/link';
+import { getAllPosts } from '@/app/components/contents/blog/utils';
+
+export default async function Home() {
+  const posts = await getAllPosts();
+
+  if (!posts?.length) {
+    return (
+      <div className="min-h-screen p-8 flex items-center justify-center">
+        <p className="text-amber-800/70">No blog posts available.</p>
+      </div>
+    );
+  }
   return (
+
     <div className="min-h-screen p-8">
       {/* Hero Section */}
       <section className="max-w-2xl mx-auto text-center mb-16">
@@ -53,23 +68,107 @@ export default function Home() {
       </section>
 
       {/* Featured Projects */}
-      <section className="max-w-2xl mx-auto">
+      <section className="max-w-2xl mx-auto mb-16">
         <h2 className="text-2xl font-semibold text-amber-900 mb-6">Featured Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <a 
-            href="/portfolio" 
-            className="block p-6 border border-amber-100 rounded-lg hover:bg-amber-50 transition-colors"
-          >
-            <h3 className="font-medium text-amber-900 mb-2">Project Name</h3>
-            <p className="text-sm text-amber-800/70">Brief description of the project</p>
-          </a>
-          <a 
-            href="/portfolio" 
-            className="block p-6 border border-amber-100 rounded-lg hover:bg-amber-50 transition-colors"
-          >
-            <h3 className="font-medium text-amber-900 mb-2">Project Name</h3>
-            <p className="text-sm text-amber-800/70">Brief description of the project</p>
-          </a>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            {projects.slice(0, 4).map((project) => (
+              <article 
+                key={project.id}
+                className="bg-white/50 rounded-lg border border-amber-100 overflow-hidden hover:shadow-md transition-shadow duration-300"
+              >
+                <Link href={`/project/${project.slug}`}>
+                  <div className="aspect-video relative overflow-hidden bg-amber-50">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h2 className="text-lg font-semibold text-amber-900">
+                        {project.title}
+                      </h2>
+                      <time className="text-xs text-amber-700/60">
+                        {new Date(project.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short'
+                        })}
+                      </time>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {project.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full text-xs"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <span className="inline-flex items-center text-amber-800 hover:text-amber-900 text-xs font-medium">
+                      Read More
+                      <svg 
+                        className="ml-1.5 w-3.5 h-3.5" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </Link>
+              </article>
+            ))}
+        </div>
+        
+      </section>
+
+      {/* Blog */}
+      <section className="max-w-2xl mx-auto">
+        <h2 className="text-2xl font-semibold text-amber-900 mb-6">Blog</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {posts.slice(0, 4).map((post) => (
+            <article 
+              key={post.slug}
+              className="group bg-white/50 rounded-xl border border-amber-100 p-6 hover:shadow-lg hover:shadow-amber-100/20 transition-all duration-300 flex flex-col"
+            >
+              <Link href={`/blog/${post.slug}`} className="flex flex-col flex-grow">
+                <div className="flex flex-col space-y-4 flex-grow">
+                  <div className="flex flex-col space-y-2">
+                    <h2 className="text-xl font-semibold text-amber-900 group-hover:text-amber-800 transition-colors">
+                      {post.title}
+                    </h2>
+                    <time 
+                      dateTime={post.date}
+                      className="text-sm text-amber-700/60"
+                    >
+                      {new Date(post.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </time>
+                  </div>
+
+                  <p className="text-amber-800/70 flex-grow">
+                    {post.excerpt}
+                  </p>
+
+                
+                </div>
+              </Link>
+            </article>
+          ))}
         </div>
       </section>
     </div>
