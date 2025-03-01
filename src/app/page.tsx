@@ -41,11 +41,11 @@ export default function Home() {
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
-                <span className="text-amber-800/70">your.email@example.com</span>
+                <span className="text-amber-800/70">futmahidayat@gmail.com</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
-                <span className="text-amber-800/70">Location: Your City</span>
+                <span className="text-amber-800/70">Location: Medan, Indonesia</span>
               </li>
             </ul>
           </div>
