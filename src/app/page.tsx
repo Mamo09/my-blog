@@ -70,7 +70,7 @@ export default async function Home() {
       {/* Featured Projects */}
       <section className="max-w-2xl mx-auto mb-16">
         <h2 className="text-2xl font-semibold text-amber-900 mb-6">Featured Projects</h2>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             {projects.slice(0, 4).map((project) => (
               <article 
                 key={project.id}
@@ -85,46 +85,26 @@ export default async function Home() {
                     />
                   </div>
 
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="p-6">
+                    <div className="items-center justify-between mb-2">
                       <h2 className="text-lg font-semibold text-amber-900">
                         {project.title}
                       </h2>
-                      <time className="text-xs text-amber-700/60">
-                        {new Date(project.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short'
-                        })}
+                      
+                      <time className="text-sm text-amber-700/60">
+                          {new Date(project.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
                       </time>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {project.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full text-xs"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="text-amber-800/70 flex-grow">
+                      {project.excerpt}
+                    </p>
 
-                    <span className="inline-flex items-center text-amber-800 hover:text-amber-900 text-xs font-medium">
-                      Read More
-                      <svg 
-                        className="ml-1.5 w-3.5 h-3.5" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M14 5l7 7m0 0l-7 7m7-7H3" 
-                        />
-                      </svg>
-                    </span>
+                  
                   </div>
                 </Link>
               </article>
@@ -140,7 +120,7 @@ export default async function Home() {
           {posts.slice(0, 4).map((post) => (
             <article 
               key={post.slug}
-              className="group bg-white/50 rounded-xl border border-amber-100 p-6 hover:shadow-lg hover:shadow-amber-100/20 transition-all duration-300 flex flex-col"
+              className=" p-6 flex flex-col bg-white/50 rounded-lg border border-amber-100 overflow-hidden hover:shadow-md transition-shadow duration-300"
             >
               <Link href={`/blog/${post.slug}`} className="flex flex-col flex-grow">
                 <div className="flex flex-col space-y-4 flex-grow">

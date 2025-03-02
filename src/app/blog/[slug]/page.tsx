@@ -9,11 +9,13 @@ interface PageParams {
     slug: string;
   }>;
 }
-
+const generateId = (text: string) =>
+  text.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')  // Ubah karakter selain huruf/angka jadi "-"
+      .replace(/^-+|-+$/g, '');
 
 export default async function BlogPost({ params }: PageParams) {
   try {
-    // Await the params object
     const { slug } = await params;
     const post = await getPostBySlug(slug);
 
@@ -21,8 +23,6 @@ export default async function BlogPost({ params }: PageParams) {
       notFound();
     }
 
-
-    // Define the type for the post object
     interface Post {
       slug: string;
       content: string;
@@ -32,10 +32,9 @@ export default async function BlogPost({ params }: PageParams) {
       tags: string[];
     }
 
-    // Cast the post to the new type
     const typedPost = post as Post;
-
     const toc = getTableOfContents(typedPost.content);
+
     const formatDate = (dateString: string) => {
       return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -47,7 +46,6 @@ export default async function BlogPost({ params }: PageParams) {
     return (
       <div className="min-h-screen p-8 bg-amber-50/20">
         <div className="relative">
-          {/* Main Content - Centered */}
           <div className="max-w-2xl mx-auto">
             <Link 
               href="/blog"
@@ -89,58 +87,49 @@ export default async function BlogPost({ params }: PageParams) {
                     </span>
                   ))}
                 </div>
-
               </header>
 
               <div className="text-amber-800/70">
-                <MDXRemote 
+              <MDXRemote 
                   source={post.content}
                   components={{
-                    h2: ({ children }) => (
-                      <h2 
-                        id={children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-')}
-                        className="text-2xl font-bold text-amber-800 mt-8 mb-3 leading-snug"
-                      >
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({ children }) => (
-                      <h3 
-                        id={children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-')}
-                        className="text-xl font-bold text-amber-700 mt-6 mb-2 leading-snug"
-                      >
-                        {children}
-                      </h3>
-                    ),
-                    h4: ({ children }) => (
-                      <h4 
-                        id={children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-')}
-                        className="text-lg font-bold text-amber-600 mt-4 mb-2 leading-snug"
-                      >
-                        {children}
-                      </h4>
-                    ),
-                    h5: ({ children }) => (
-                      <h5 
-                        id={children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-')}
-                        className="text-base font-bold text-amber-500 mt-3 mb-2 leading-snug"
-                      >
-                        {children}
-                      </h5>
-                    ),
+                    h1: ({ children }) => {
+                      const id = generateId(children?.toString() || '');
+                      return <h1 id={id} className="text-4xl font-bold">{children}</h1>;
+                    },
+                    h2: ({ children }) => {
+                      const id = generateId(children?.toString() || '');
+                      return <h2 id={id} className="text-3xl font-bold">{children}</h2>;
+                    },
+                    h3: ({ children }) => {
+                      const id = generateId(children?.toString() || '');
+                      return <h3 id={id} className="text-2xl font-bold">{children}</h3>;
+                    },
+                    h4: ({ children }) => {
+                      const id = generateId(children?.toString() || '');
+                      return <h4 id={id} className="text-xl font-bold">{children}</h4>;
+                    },
+                    h5: ({ children }) => {
+                      const id = generateId(children?.toString() || '');
+                      return <h5 id={id} className="text-lg font-bold">{children}</h5>;
+                    },
+                    h6: ({ children }) => {
+                      const id = generateId(children?.toString() || '');
+                      return <h6 id={id} className="text-base font-bold">{children}</h6>;
+                    }
                   }}
                 />
               </div>
             </article>
           </div>
 
-          {/* Table of Contents - Fixed Position */}
-          <div className="hidden lg:block fixed top-8 right-8 w-72">
-            <div className="sticky top-8">
-              <TableOfContents toc={toc} />
+          {toc.length > 0 && (
+            <div className="hidden lg:block fixed top-8 right-8 w-72">
+              <div className="sticky top-8">
+                <TableOfContents toc={toc} />
+              </div>
             </div>
-          </div>
-
+          )}
         </div>
       </div>
     );

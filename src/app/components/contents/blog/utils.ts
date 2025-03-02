@@ -20,6 +20,7 @@ interface TableOfContents {
   level: number;
 }
 
+// Fungsi untuk mengambil semua post
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
     const fileNames = readdirSync(postsDirectory)
@@ -45,6 +46,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   }
 }
 
+// Fungsi untuk mengambil post berdasarkan slug
 export async function getPostBySlug(slug: string) {
   try {
     const fullPath = join(process.cwd(), 'src/app/components/contents/blog', `${slug}.mdx`);
@@ -62,14 +64,18 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
+// Fungsi untuk membuat Table of Contents (Mendukung h1 hingga h6)
 export function getTableOfContents(content: string): TableOfContents[] {
-  const headingLines = content.split('\n').filter(line => line.match(/^#{1,3} /));
+  const headingLines = content.split('\n').filter(line => line.match(/^#{1,6} /));
 
   return headingLines.map(line => {
     const match = line.match(/^#+/);
     const level = match ? match[0].length : 0;
     const title = line.replace(/^#+\s+/, '');
-    const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const id = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-') // Ubah karakter selain huruf/angka menjadi "-"
+      .replace(/^-+|-+$/g, '');    // Hapus "-" di awal dan akhir
 
     return { id, title, level };
   });
