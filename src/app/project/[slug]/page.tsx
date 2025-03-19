@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 const formatDate = (dateString: string) => {
@@ -18,7 +18,7 @@ const formatDate = (dateString: string) => {
 };
 
 export default async function ProjectDetail({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const project = projects.find(p => p.slug === slug);
   if (!project) {
     notFound();
