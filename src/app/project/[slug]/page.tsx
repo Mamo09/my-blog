@@ -3,11 +3,12 @@ import { projects } from '@/data/projects';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-interface PageParams {
-  params: Promise<{
+interface PageProps {
+  params: {
     slug: string;
-  }>;
+  };
 }
+
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -16,8 +17,8 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default async function ProjectDetail({ params }: PageParams) {
-  const { slug } = await params;
+export default async function ProjectDetail({ params }: PageProps) {
+  const { slug } = params;
   const project = projects.find(p => p.slug === slug);
   if (!project) {
     notFound();
