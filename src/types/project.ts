@@ -3,6 +3,7 @@ export type Project = {
   slug: string;
   title: string;
   excerpt: string;
+  readingTime: string;
   description: string;
   date: string;
   image: string;

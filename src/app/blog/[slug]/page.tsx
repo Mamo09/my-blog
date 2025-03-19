@@ -69,7 +69,7 @@ export default async function BlogPost({ params }: PageParams) {
 
             <article className="prose prose-amber max-w-none">
               <header className="mb-8 not-prose">
-                <h1 className="text-3xl font-extrabold text-amber-900 mb-4 leading-tight">
+                <h1 className="text-2xl font-bold text-amber-900 mb-4 leading-tight">
                   {typedPost.title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-amber-800/70 mb-6">
@@ -95,27 +95,27 @@ export default async function BlogPost({ params }: PageParams) {
                   components={{
                     h1: ({ children }) => {
                       const id = generateId(children?.toString() || '');
-                      return <h1 id={id} className="text-4xl font-bold">{children}</h1>;
+                      return <h1 id={id} className="text-2xl font-semibold">{children}</h1>;
                     },
                     h2: ({ children }) => {
                       const id = generateId(children?.toString() || '');
-                      return <h2 id={id} className="text-3xl font-bold">{children}</h2>;
+                      return <h2 id={id} className="text-2xl font-semibold">{children}</h2>;
                     },
                     h3: ({ children }) => {
                       const id = generateId(children?.toString() || '');
-                      return <h3 id={id} className="text-2xl font-bold">{children}</h3>;
+                      return <h3 id={id} className="text-xl font-semibold">{children}</h3>;
                     },
                     h4: ({ children }) => {
                       const id = generateId(children?.toString() || '');
-                      return <h4 id={id} className="text-xl font-bold">{children}</h4>;
+                      return <h4 id={id} className="text-xl font-semibold">{children}</h4>;
                     },
                     h5: ({ children }) => {
                       const id = generateId(children?.toString() || '');
-                      return <h5 id={id} className="text-lg font-bold">{children}</h5>;
+                      return <h5 id={id} className="text-lg font-semibold">{children}</h5>;
                     },
                     h6: ({ children }) => {
                       const id = generateId(children?.toString() || '');
-                      return <h6 id={id} className="text-base font-bold">{children}</h6>;
+                      return <h6 id={id} className="text-base font-semibold">{children}</h6>;
                     }
                   }}
                 />

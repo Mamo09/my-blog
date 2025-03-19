@@ -34,12 +34,12 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
   }, []);
 
   return (
-    <nav className="p-6 bg-white/80 rounded-xl border border-amber-100 shadow-sm">
+    <nav className="p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-amber-100 shadow-sm">
       <h2 className="text-base font-bold text-amber-900 mb-4">Table of Contents</h2>
       <ul className="space-y-3">
         {toc.map(({ id, title, level }) => (
           <li key={id} className={`ml-${(level - 1) * 4}`}>
-            <a href={`#${id}`} className="text-sm text-amber-800 hover:text-amber-900 block py-1">
+            <a href={`#${id}`} className="block text-sm text-amber-800/70 hover:text-amber-900 hover:bg-amber-50 px-2 py-1 rounded transition-colors">
               {title}
             </a>
           </li>

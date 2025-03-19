@@ -8,6 +8,13 @@ interface PageParams {
     slug: string;
   }>;
 }
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
 
 export default async function ProjectDetail({ params }: PageParams) {
   const { slug } = await params;
@@ -27,29 +34,49 @@ export default async function ProjectDetail({ params }: PageParams) {
     <div className="min-h-screen p-8 flex">
       <div className="max-w-2xl mx-auto w-full">
         <div className="flex">
-          <div className="w-full md:w-3/4">
+          <div className="w-full">
             {/* Back Button */}
             <Link 
               href="/project"
-              className="inline-flex items-center text-amber-800 hover:text-amber-900 mb-8 text-sm"
+              className="inline-flex items-center text-amber-800 hover:text-amber-900 mb-12 text-sm group"
             >
-              ← Back to Projects
+              <svg 
+                className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M15 19l-7-7 7-7" 
+                />
+              </svg>
+              Back to Projects
             </Link>
 
             {/* Project Header */}
-            <div className="mb-8">
-              <h1 className="text-2xl font-bold text-amber-900 mb-4">{project.title}</h1>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag, i) => (
+            <header className="mb-8 not-prose">
+              <h1 className="text-2xl font-bold text-amber-900 mb-4 leading-tight">
+                {project.title}
+              </h1>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-amber-800/70 mb-6">
+                <time dateTime={project.date} className="font-medium">{formatDate(project.date)}</time>
+                <span>•</span>
+                <span>{project.readingTime}</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((tag: string) => (
                   <span
-                    key={i}
-                    className="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs"
+                    key={tag}
+                    className="px-3 py-1 bg-amber-100/50 text-amber-800 rounded-full text-sm font-medium"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-            </div>
+            </header>
 
             {/* Content Sections */}
             <div className="space-y-12">
@@ -72,13 +99,13 @@ export default async function ProjectDetail({ params }: PageParams) {
               {/* Screenshots Section */}
               <section id="screenshots" className="scroll-mt-8">
                 <h2 className="text-2xl font-semibold text-amber-900 mb-4">Screenshots</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className='bg-amber-50'>
                   {project.screenshots?.map((screenshot, index) => (
                     <div key={index} className="aspect-video bg-amber-50 rounded-lg overflow-hidden">
                       <img
                         src={screenshot}
                         alt={`${project.title} screenshot ${index + 1}`}
-                        className="object-cover w-full h-full"
+                        className="object-cover w-full h-full py-2"
                       />
                     </div>
                   ))}
